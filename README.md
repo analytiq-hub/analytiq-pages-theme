@@ -415,7 +415,7 @@ The theme is available as open source under the terms of the [MIT License](LICEN
 
 Here are some sites that showcase the Analytiq Pages Theme in action:
 
-- **[Analytiq Hub](https://analytiqhub.com)** - ([GitHub](https://github.com/analytiq-hub/analytiq-hub.github.io)) - Business intelligence and analytics platform
-- **[DocRouter.AI](https://docrouter.ai)** - ([GitHub](https://github.com/analytiq-hub/docrouter.github.io/)) - AI-powered document routing solution
-- **[SigAgent.AI](https://sigagent.ai)** - ([GitHub](https://github.com/analytiq-hub/sigagent.github.io)) - Signature analysis and automation platform
-- **[Bitdribble](https://bitdribble.github.io)** - ([GitHub](https://github.com/Bitdribble/bitdribble.github.io)) - Technology consulting and development
+- **[Analytiq Hub](https://analytiqhub.com)** - ([GitHub](https://github.com/analytiq-hub/analytiq-hub.github.io)) - Consulting company websie
+- **[DocRouter.AI](https://docrouter.ai)** - ([GitHub](https://github.com/analytiq-hub/docrouter.github.io/)) - AI-powered document processing solution
+- **[SigAgent.AI](https://sigagent.ai)** - ([GitHub](https://github.com/analytiq-hub/sigagent.github.io)) - Claude Agent monitoring platform
+- **[Bitdribble](https://bitdribble.github.io)** - ([GitHub](https://github.com/Bitdribble/bitdribble.github.io)) - Personal knowledge repository
