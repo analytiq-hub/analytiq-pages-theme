@@ -2,6 +2,10 @@
 
 A modern, responsive Jekyll theme that combines the power of Tailwind CSS with advanced features like syntax highlighting, interactive diagrams, and comprehensive blog layouts. Perfect for technical documentation, business websites, and developer portfolios.
 
+**👉 [View Live Demo](https://analytiqhub.com/analytiq-pages-starter/)**
+
+**🚀 [Get Started with the Starter Template](https://github.com/analytiq-hub/analytiq-pages-starter)**
+
 ## Features
 
 - **Modern Design**: Built with Tailwind CSS for responsive, customizable layouts
