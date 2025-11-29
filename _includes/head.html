@@ -74,12 +74,20 @@
   <!-- Custom styles link -->
   <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
   {%- feed_meta -%}
-  
+
   <!-- Pagination JavaScript -->
   <script src="{{ "/assets/js/pagination.js" | relative_url }}"></script>
+
+  {%- if site.calendly_url -%}
+  <!-- Calendly configuration -->
+  <script>
+    window.siteCalendlyUrl = "{{ site.calendly_url }}";
+  </script>
+  <script src="{{ "/assets/js/calendly.js" | relative_url }}"></script>
+  {%- endif -%}
 
   {%- include custom-head.html -%}
   {% include mathjax.html %}
   {% include enhanced-code-blocks.html %}
-  
+
 </head>
