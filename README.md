@@ -21,7 +21,23 @@ A modern, responsive Jekyll theme that combines the power of Tailwind CSS with a
 
 ## Installation
 
-Add this line to your Jekyll site's `Gemfile`:
+You can use the Analytiq Pages Theme in two ways:
+
+### Option 1: Use the Starter Template (Recommended)
+
+The easiest way to get started is to use the [analytiq-pages-starter](https://github.com/analytiq-hub/analytiq-pages-starter) template, which includes everything pre-configured:
+
+1. **Click "Use this template"** on the [starter repository](https://github.com/analytiq-hub/analytiq-pages-starter)
+2. **Enable GitHub Pages** in Settings → Pages
+3. Your site will be live automatically!
+
+The starter includes sample content, blog posts, documentation pages, and all the configuration you need.
+
+### Option 2: Embed the Theme in Your Existing Jekyll Site
+
+If you already have a Jekyll site and want to add this theme:
+
+1. **Add the theme to your `Gemfile`:**
 
 ```ruby
 gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme"
@@ -30,16 +46,16 @@ gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages
 Or for a specific version (recommended):
 
 ```ruby
-gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme", tag: "v0.1.3"
+gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme", tag: "v0.1.8"
 ```
 
-And add this line to your site's `_config.yml`:
+2. **Add the theme to your `_config.yml`:**
 
 ```yaml
 theme: analytiq-pages-theme
 ```
 
-Then execute:
+3. **Install dependencies:**
 
 ```bash
 bundle install
@@ -47,24 +63,7 @@ bundle install
 
 ## Quick Start
 
-1. **Create a new Jekyll site:**
-   ```bash
-   jekyll new my-site
-   cd my-site
-   ```
-
-2. **Add the theme to your Gemfile:**
-   ```ruby
-   gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme"
-   ```
-
-3. **Install and serve:**
-   ```bash
-   bundle install
-   bundle exec jekyll serve
-   ```
-
-4. **Customize your `_config.yml`:**
+After installing the theme (see [Installation](#installation) above), customize your `_config.yml`:
    ```yaml
    title: "My Awesome Site"
    author:
