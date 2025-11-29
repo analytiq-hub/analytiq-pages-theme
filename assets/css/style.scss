@@ -1,7 +1,7 @@
 ---
 ---
 
-/* Main stylesheet - imports theme and custom styles */
+/* Main stylesheet - loads theme and custom styles */
 
-@import "theme";
-@import "custom";
+@use "theme";
+@use "custom";
