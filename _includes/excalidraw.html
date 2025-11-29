@@ -1,0 +1,44 @@
+{% comment %}
+  Smart Excalidraw embed with multiple rendering options
+
+  Usage:
+    {% include excalidraw.html file="/path/to/file.excalidraw" %}
+    {% include excalidraw.html file="/path/to/file.excalidraw" mode="interactive" %}
+    {% include excalidraw.html file="/path/to/file.excalidraw" mode="static" %}
+    {% include excalidraw.html file="/path/to/file.excalidraw" mode="link" %}
+
+  Parameters:
+    - file: (required) Path to the .excalidraw file
+    - mode: (optional) Rendering mode - "static" (default), "interactive", or "link"
+    - width: (optional) Width for interactive mode, default: "100%"
+    - height: (optional) Height for interactive mode, default: "600px"
+{% endcomment %}
+
+{% assign mode = include.mode | default: "static" %}
+
+{% if mode == "interactive" %}
+  <!-- Iframe embed -->
+  {% include excalidraw-embed.html
+     file=include.file
+     width=include.width
+     height=include.height
+  %}
+
+{% elsif mode == "static" %}
+  <!-- Static SVG -->
+  {% include excalidraw-static.html file=include.file %}
+
+{% elsif mode == "link" %}
+  <!-- Just a link to open in editor -->
+  <div class="excalidraw-link" style="margin: 2rem 0;">
+    <a href="{{ '/excalidraw-edit' | relative_url }}?file={{ include.file | relative_url }}"
+       class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 no-underline"
+       target="_blank">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+      Open {{ include.file | split: '/' | last | remove: '.excalidraw' }} in Excalidraw
+    </a>
+  </div>
+{% endif %}

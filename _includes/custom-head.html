@@ -1,0 +1,14 @@
+{% comment %}
+  Site-specific head customizations. Add your custom meta tags, analytics, favicons, etc. here.
+  
+  Examples:
+  - Google Analytics or other tracking codes
+  - Custom favicons from https://realfavicongenerator.net/
+  - Site-specific meta tags (Open Graph, Twitter Cards)
+  - Additional fonts beyond theme defaults
+  - Custom CSS or JavaScript for this specific site
+{% endcomment %}
+
+{%- if jekyll.environment == 'production' and site.google_analytics -%}
+  {%- include google-analytics.html -%}
+{%- endif -%}

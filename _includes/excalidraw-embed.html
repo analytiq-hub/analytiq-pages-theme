@@ -1,0 +1,30 @@
+{% comment %}
+  Embed an interactive Excalidraw diagram in an iframe
+
+  Usage:
+    {% include excalidraw-embed.html file="/assets/excalidraw/diagram.excalidraw" %}
+    {% include excalidraw-embed.html file="/assets/excalidraw/diagram.excalidraw" height="800px" %}
+    {% include excalidraw-embed.html file="/assets/excalidraw/diagram.excalidraw" width="800px" height="600px" %}
+
+  Parameters:
+    - file: (required) Path to the .excalidraw file
+    - width: (optional) Width of iframe, default: "100%"
+    - height: (optional) Height of iframe, default: "600px"
+{% endcomment %}
+
+{% assign iframe_width = include.width | default: "100%" %}
+{% assign iframe_height = include.height | default: "600px" %}
+{% assign iframe_file = include.file %}
+
+<div class="excalidraw-embed-container" style="margin: 2rem 0;">
+  <iframe
+    src="{{ '/excalidraw-edit' | relative_url }}?file={{ iframe_file | relative_url }}"
+    width="{{ iframe_width }}"
+    height="{{ iframe_height }}"
+    frameborder="0"
+    loading="lazy"
+    allow="clipboard-write"
+    style="border: 1px solid #e0e0e0; border-radius: 8px; display: block;"
+    title="Excalidraw diagram: {{ iframe_file | split: '/' | last | remove: '.excalidraw' }}">
+  </iframe>
+</div>

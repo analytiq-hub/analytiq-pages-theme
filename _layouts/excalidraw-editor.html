@@ -1,0 +1,337 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Excalidraw Editor - {{ site.title | escape }}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {%- include head.html -%}
+
+    <!-- Excalidraw CSS -->
+    <link
+      rel="stylesheet"
+      href="https://esm.sh/@excalidraw/excalidraw@0.18.0/dist/dev/index.css"
+    />
+
+    <!-- Custom styles for Excalidraw page -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* Excalidraw container takes remaining space */
+      #app {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Fix Excalidraw button clicks - SVG children should not intercept clicks */
+      #app button svg,
+      #app button svg * {
+        pointer-events: none;
+      }
+
+      /* Ensure Excalidraw dropdown menus are visible and have high z-index */
+      #app .dropdown-menu,
+      #app .dropdown-menu-container,
+      #app .Island {
+        visibility: visible !important;
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        font-size: 1.2rem;
+        color: #666;
+      }
+
+      .error {
+        padding: 2rem;
+        color: #d32f2f;
+        background: #ffebee;
+        border: 1px solid #ef5350;
+        border-radius: 4px;
+        margin: 2rem;
+      }
+
+      /* File info banner - minimal, below header */
+      .file-info-banner {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        color: #666;
+        text-align: center;
+      }
+
+      .file-info-banner.hidden {
+        display: none;
+      }
+    </style>
+
+    <!-- Set Excalidraw asset path -->
+    <script>
+      window.EXCALIDRAW_ASSET_PATH = "https://esm.sh/@excalidraw/excalidraw@0.18.0/dist/prod/";
+    </script>
+
+    <!-- Import map for React - must come before any module scripts -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.3.1",
+          "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+          "react-dom": "https://esm.sh/react-dom@18.3.1",
+          "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+        },
+        "scopes": {
+          "https://esm.sh/": {
+            "react": "https://esm.sh/react@18.3.1",
+            "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+            "react-dom": "https://esm.sh/react-dom@18.3.1",
+            "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-gray-50 text-gray-700 font-sans antialiased">
+    {%- include header.html -%}
+
+    <!-- File info banner -->
+    <div id="file-info-banner" class="file-info-banner hidden">
+      <span id="file-info-text"></span>
+    </div>
+
+    <!-- Excalidraw canvas -->
+    <div id="app">
+      <div class="loading">Loading Excalidraw...</div>
+    </div>
+
+    <!-- Excalidraw initialization script -->
+    <script type="module">
+      // Import React at module level using namespace import
+      import * as React from "react";
+      import * as ReactDOM from "react-dom/client";
+
+      // Make React available globally immediately
+      window.React = React;
+      window.ReactDOM = ReactDOM;
+
+      (async () => {
+        try {
+          // Import Excalidraw - the scoped import map should ensure it uses our React
+          const excalidrawModule = await import("https://esm.sh/@excalidraw/excalidraw@0.18.0?external=react,react-dom");
+          const { Excalidraw } = excalidrawModule;
+
+          const appElement = document.getElementById("app");
+
+          if (!appElement) {
+            console.error("Excalidraw: #app element not found");
+            return;
+          }
+
+          try {
+            // Check if a file parameter is provided in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const filePath = urlParams.get('file');
+
+            let initialData = null;
+            let defaultFileName = 'Untitled'; // Default filename
+
+            // Helper function to calculate bounds and fit parameters
+            function calculateFitToViewport(elements) {
+              const visibleElements = elements.filter(el => !el.isDeleted);
+              if (visibleElements.length === 0) return null;
+
+              // Calculate bounding box
+              let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+              visibleElements.forEach(el => {
+                const x1 = el.x || 0;
+                const y1 = el.y || 0;
+                const x2 = x1 + (el.width || 0);
+                const y2 = y1 + (el.height || 0);
+
+                // Handle lines/arrows with points
+                if (el.points && el.points.length > 0) {
+                  el.points.forEach(p => {
+                    minX = Math.min(minX, (el.x || 0) + p[0]);
+                    minY = Math.min(minY, (el.y || 0) + p[1]);
+                    maxX = Math.max(maxX, (el.x || 0) + p[0]);
+                    maxY = Math.max(maxY, (el.y || 0) + p[1]);
+                  });
+                } else {
+                  minX = Math.min(minX, x1);
+                  minY = Math.min(minY, y1);
+                  maxX = Math.max(maxX, x2);
+                  maxY = Math.max(maxY, y2);
+                }
+              });
+
+              // Get viewport dimensions (estimate based on window size minus header/toolbar)
+              const headerHeight = 60; // Approximate header height
+              const fileBannerHeight = 40; // File info banner
+              const toolbarHeight = 60; // Excalidraw toolbar
+              const bottomBarHeight = 50; // Bottom zoom controls
+              const viewportWidth = window.innerWidth;
+              const viewportHeight = window.innerHeight - headerHeight - fileBannerHeight - toolbarHeight - bottomBarHeight;
+
+              // Calculate content dimensions with padding
+              const padding = 60;
+              const contentWidth = maxX - minX + padding * 2;
+              const contentHeight = maxY - minY + padding * 2;
+              const centerX = (minX + maxX) / 2;
+              const centerY = (minY + maxY) / 2;
+
+              // Calculate zoom to fit (don't zoom past 100%)
+              const zoomX = viewportWidth / contentWidth;
+              const zoomY = viewportHeight / contentHeight;
+              const zoom = Math.min(zoomX, zoomY, 1) * 0.85; // 85% to leave margin
+
+              // Calculate scroll to center content
+              // In Excalidraw: scrollX/Y positions the viewport relative to content
+              const scrollX = viewportWidth / (2 * zoom) - centerX;
+              const scrollY = viewportHeight / (2 * zoom) - centerY;
+
+              console.log("Calculated fit:", {
+                bounds: { minX, minY, maxX, maxY },
+                content: { width: contentWidth, height: contentHeight, centerX, centerY },
+                viewport: { width: viewportWidth, height: viewportHeight },
+                result: { zoom, scrollX, scrollY }
+              });
+
+              return { zoom, scrollX, scrollY };
+            }
+
+            // Load Excalidraw file if specified
+            if (filePath) {
+              try {
+                const response = await fetch(filePath);
+                if (response.ok) {
+                  const excalidrawData = await response.json();
+                  // Excalidraw files can have different structures
+                  if (excalidrawData.elements) {
+                    const elements = excalidrawData.elements;
+                    const existingAppState = excalidrawData.appState || {};
+
+                    // Extract leaf filename (without path and extension) for default save name
+                    const filePathParts = filePath.split('/');
+                    const leafFileName = filePathParts[filePathParts.length - 1];
+                    // Remove .excalidraw extension if present
+                    defaultFileName = leafFileName.replace(/\.excalidraw$/, '');
+
+                    // Calculate fit parameters before creating initialData
+                    const fitParams = calculateFitToViewport(elements);
+
+                    // Set initial data with elements AND calculated scroll/zoom
+                    initialData = {
+                      elements: elements,
+                      appState: {
+                        ...existingAppState,
+                        viewBackgroundColor: existingAppState.viewBackgroundColor || "#ffffff",
+                        name: defaultFileName, // Set default filename for save dialog
+                        // Apply calculated fit if available
+                        ...(fitParams && {
+                          scrollX: fitParams.scrollX,
+                          scrollY: fitParams.scrollY,
+                          zoom: { value: fitParams.zoom }
+                        })
+                      },
+                      files: excalidrawData.files || {},
+                      scrollToContent: true // Tell Excalidraw to fit content
+                    };
+
+                    console.log("Loaded Excalidraw file:", filePath, "- Default save name:", defaultFileName);
+                    // Update file info banner
+                    const fileInfoBanner = document.getElementById("file-info-banner");
+                    const fileInfoText = document.getElementById("file-info-text");
+                    if (fileInfoBanner && fileInfoText) {
+                      fileInfoText.textContent = `Editing: ${filePath}`;
+                      fileInfoBanner.classList.remove("hidden");
+                    }
+                  } else {
+                    console.warn("Excalidraw file format not recognized:", filePath);
+                  }
+                } else {
+                  console.error("Failed to load Excalidraw file:", response.statusText);
+                }
+              } catch (error) {
+                console.error("Error loading Excalidraw file:", error);
+              }
+            }
+
+            // Create React root and render Excalidraw
+            const root = ReactDOM.createRoot(appElement);
+
+            // Store ref to access Excalidraw API
+            let excalidrawAPI = null;
+
+            root.render(
+              React.createElement(Excalidraw, {
+                excalidrawAPI: (api) => {
+                  excalidrawAPI = api;
+                  console.log("Excalidraw API ready");
+                },
+                initialData: initialData,
+                onChange: (elements, appState, files) => {
+                  // Optional: log changes for debugging
+                  // console.log("Excalidraw changed", { elements, appState, files });
+                },
+                onCollabButtonClick: () => {
+                  window.alert("Collaboration feature can be implemented here");
+                },
+              })
+            );
+            console.log("Excalidraw initialized successfully");
+          } catch (error) {
+            console.error("Error initializing Excalidraw:", error);
+            appElement.innerHTML = `
+              <div class="error">
+                <h2>Error loading Excalidraw</h2>
+                <p><strong>Error:</strong> ${error.message}</p>
+                <p>Please check the browser console (F12) for more details.</p>
+                <p><strong>Stack:</strong></p>
+                <pre style="font-size: 0.8rem; overflow: auto;">${error.stack || 'No stack trace available'}</pre>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error("Error loading modules:", error);
+          const appElement = document.getElementById("app");
+          if (appElement) {
+            appElement.innerHTML = `
+              <div class="error">
+                <h2>Error loading Excalidraw modules</h2>
+                <p><strong>Error:</strong> ${error.message}</p>
+                <p>Failed to load required modules. Please check:</p>
+                <ul>
+                  <li>Your internet connection</li>
+                  <li>Browser console for CORS or network errors</li>
+                  <li>That you're using a modern browser with ES module and import map support</li>
+                </ul>
+                <p><strong>Stack:</strong></p>
+                <pre style="font-size: 0.8rem; overflow: auto;">${error.stack || 'No stack trace available'}</pre>
+              </div>
+            `;
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

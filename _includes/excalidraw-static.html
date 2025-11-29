@@ -1,0 +1,23 @@
+{% comment %}
+  Render Excalidraw as static SVG (non-interactive, faster loading)
+
+  Usage:
+    {% include excalidraw-static.html file="/assets/excalidraw/diagram.excalidraw" %}
+
+  Parameters:
+    - file: (required) Path to the .excalidraw file
+
+  Note: This renders the diagram as a static SVG. For interactive editing, use excalidraw-embed.html
+{% endcomment %}
+
+<div
+  class="excalidraw-static"
+  data-excalidraw="{{ include.file | relative_url }}"
+  style="margin: 2rem 0;">
+  <div class="loading" style="padding: 2rem; text-align: center; color: #666;">Loading diagram...</div>
+</div>
+
+{% unless page.excalidraw_renderer_loaded %}
+  <script type="module" src="{{ '/assets/js/excalidraw/render-excalidraw.js' | relative_url }}" defer></script>
+  {% assign page.excalidraw_renderer_loaded = true %}
+{% endunless %}
