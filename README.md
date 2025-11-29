@@ -1,6 +1,6 @@
 # Analytiq Pages Theme
 
-A modern, responsive Jekyll theme featuring Tailwind CSS, syntax highlighting, blog layouts, and Excalidraw integration. Designed for technical content and business websites.
+A modern, responsive Jekyll theme that combines the power of Tailwind CSS with advanced features like syntax highlighting, interactive diagrams, and comprehensive blog layouts. Perfect for technical documentation, business websites, and developer portfolios.
 
 ## Features
 
@@ -8,6 +8,8 @@ A modern, responsive Jekyll theme featuring Tailwind CSS, syntax highlighting, b
 - **Syntax Highlighting**: Integrated highlight.js with enhanced code blocks
 - **Blog System**: Post layouts with pagination, sidebar, and category support
 - **Excalidraw Integration**: Interactive diagram editing and embedding
+- **Documentation Layouts**: Specialized layouts for docs, case studies, and blog posts
+- **Calendly Integration**: Configurable appointment scheduling
 - **SEO Ready**: Jekyll SEO Tag integration
 - **Customizable**: Override hooks for site-specific customizations
 - **Responsive Navigation**: Dropdown menus with mobile hamburger menu
@@ -21,10 +23,10 @@ Add this line to your Jekyll site's `Gemfile`:
 gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme"
 ```
 
-Or for a specific version:
+Or for a specific version (recommended):
 
 ```ruby
-gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme", tag: "v0.1.0"
+gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme", tag: "v0.1.3"
 ```
 
 And add this line to your site's `_config.yml`:
@@ -39,9 +41,46 @@ Then execute:
 bundle install
 ```
 
-## Usage
+## Quick Start
 
-### Basic Configuration
+1. **Create a new Jekyll site:**
+   ```bash
+   jekyll new my-site
+   cd my-site
+   ```
+
+2. **Add the theme to your Gemfile:**
+   ```ruby
+   gem "analytiq-pages-theme", git: "https://github.com/analytiq-hub/analytiq-pages-theme"
+   ```
+
+3. **Install and serve:**
+   ```bash
+   bundle install
+   bundle exec jekyll serve
+   ```
+
+4. **Customize your `_config.yml`:**
+   ```yaml
+   title: "My Awesome Site"
+   author:
+     name: "Your Name"
+     email: "you@example.com"
+   description: "A brief description of your site"
+
+   # Navigation
+   header_pages:
+     - title: "About"
+       url: "/about"
+     - title: "Blog"
+       url: "/blog"
+   ```
+
+Visit `http://localhost:4000` to see your site!
+
+## Configuration
+
+### Basic Site Setup
 
 Configure your site in `_config.yml`:
 
@@ -85,7 +124,9 @@ minima:
     linkedin: username
 ```
 
-### Layouts
+## Content & Layouts
+
+### Available Layouts
 
 The theme provides several layouts:
 
@@ -190,7 +231,7 @@ your-site/
 {% include excalidraw.html file="/assets/excalidraw/diagram.excalidraw" mode="link" %}
 ```
 
-### Customization Hooks
+## Customization
 
 The theme provides three customization hooks that you can override in your site:
 
@@ -329,16 +370,38 @@ To override any theme file, simply create the same file path in your site. For e
 
 ## Dependencies
 
-- Jekyll ~> 3.9
-- jekyll-feed ~> 0.12
-- jekyll-seo-tag ~> 2.6
-- jekyll-pdf-embed ~> 1.1
-- jekyll-paginate-v2 ~> 3.0 (optional)
+- **Jekyll ~> 3.9** - Static site generator (core dependency)
+- **jekyll-feed ~> 0.12** - RSS feed generation for blog posts
+- **jekyll-seo-tag ~> 2.6** - SEO meta tags and structured data
+- **jekyll-pdf-embed ~> 1.1** - PDF embedding support
+- **jekyll-paginate-v2 ~> 3.0** - Advanced pagination for blogs (optional)
 
 ## Browser Support
 
 - Modern browsers with ES6 module support
 - Import map support required for Excalidraw features
+
+## Troubleshooting
+
+### Common Issues
+
+**Theme not loading after bundle install:**
+- Clear Jekyll cache: `rm -rf _site .jekyll-cache`
+- Rebuild: `bundle exec jekyll build`
+
+**Excalidraw diagrams not rendering:**
+- Ensure `.excalidraw` files are in `assets/excalidraw/`
+- Check browser console for JavaScript errors
+- Verify import map support in your browser
+
+**Styles not applying:**
+- Check that Tailwind CSS is loading in browser dev tools
+- Ensure `_config.yml` is valid YAML
+- Try rebuilding assets: `bundle exec jekyll build`
+
+**Navigation not working:**
+- Verify `header_pages` configuration in `_config.yml`
+- Check that page files exist at specified URLs
 
 ## Contributing
 
@@ -350,7 +413,9 @@ The theme is available as open source under the terms of the [MIT License](LICEN
 
 ## Sites Using This Theme
 
-- [Bitdribble](https://bitdribble.github.io)
-- [SigAgent.AI](https://sigagent.ai)
-- [Analytiq Hub](https://analytiqhub.com)
-- [DocRouter.AI](https://docrouter.ai)
+Here are some sites that showcase the Analytiq Pages Theme in action:
+
+- **[Analytiq Hub](https://analytiqhub.com)** - ([GitHub](https://github.com/analytiq-hub/analytiq-hub.github.io)) - Business intelligence and analytics platform
+- **[DocRouter.AI](https://docrouter.ai)** - ([GitHub](https://github.com/analytiq-hub/docrouter.github.io/)) - AI-powered document routing solution
+- **[SigAgent.AI](https://sigagent.ai)** - ([GitHub](https://github.com/analytiq-hub/sigagent.github.io)) - Signature analysis and automation platform
+- **[Bitdribble](https://bitdribble.github.io)** - ([GitHub](https://github.com/Bitdribble/bitdribble.github.io)) - Technology consulting and development
