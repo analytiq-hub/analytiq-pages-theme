@@ -1,0 +1,17 @@
+<!-- Testimonials Section -->
+<section class="bg-blue-50 rounded-lg shadow-lg p-8 mb-12">
+    <h2 class="text-3xl font-semibold text-gray-900 mb-8 text-center">{{ include.title | default: "What Our Clients Say" }}</h2>
+    <div id="testimonials-container" class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <!-- Testimonials will be included here by the page -->
+    </div>
+    
+    <!-- Load More / Load Less Button -->
+    <div class="text-center mt-8">
+        <button id="load-more-testimonials" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+            Load More Testimonials
+        </button>
+    </div>
+</section>
+
+<script src="{{ "/assets/js/testimonials.js" | relative_url }}"></script>
+
