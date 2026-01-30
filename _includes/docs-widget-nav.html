@@ -1,0 +1,29 @@
+{% comment %}
+  Recursive docs sidebar nav: render items as links or collapsible groups (arbitrary depth).
+  Usage: {% include docs-widget-nav.html items=include.items level=0 %}
+  Each item is either { title, url } or { title, children: [ ... ] }.
+  Groups use <details>/<summary> so submenus expand on click (not permanently open).
+{% endcomment %}
+{%- for item in include.items -%}
+  {%- if item.children -%}
+    <details class="docs-nav-group mt-1 first:mt-0 group/details" style="padding-left: {{ include.level | times: 8 }}px;">
+      <summary class="flex items-center justify-between cursor-pointer list-none py-1 px-2 rounded text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+        <span class="docs-nav-group-label">{{ item.title | escape }}</span>
+        <svg class="docs-nav-chevron w-3.5 h-3.5 text-gray-400 flex-shrink-0 ml-1 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+        </svg>
+      </summary>
+      <div class="docs-nav-children pl-2 mt-0 border-l border-gray-200 ml-2 space-y-0">
+        {% assign next_level = include.level | plus: 1 %}
+        {% include docs-widget-nav.html items=item.children level=next_level %}
+      </div>
+    </details>
+  {%- else -%}
+    {%- assign item_url_slash = item.url | append: '/' -%}
+    <a href="{{ item.url | relative_url }}"
+       class="docs-nav-link flex items-center px-2 py-1 text-xs text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors duration-150 {% if page.url == item.url or page.url == item_url_slash %}bg-blue-50 text-blue-600{% endif %}"
+       style="margin-left: {{ include.level | times: 8 }}px;">
+      {{ item.title | escape }}
+    </a>
+  {%- endif -%}
+{%- endfor -%}

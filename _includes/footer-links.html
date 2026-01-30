@@ -1,0 +1,18 @@
+{% comment %}
+  Recursive footer links: render links or nested groups (arbitrary depth).
+  Usage: {% include footer-links.html links=section.links level=0 %}
+  Each link is either { title, url } or { title, children: [ ... ] }.
+{% endcomment %}
+{%- for link in include.links -%}
+  {%- if link.children -%}
+    <div class="mt-2 first:mt-0" style="margin-left: {{ include.level | times: 8 }}px;">
+      <div class="text-xs font-semibold text-gray-600 mt-2 first:mt-0">{{ link.title | escape }}</div>
+      <nav class="space-y-1 mt-1">
+        {% assign next_level = include.level | plus: 1 %}
+        {% include footer-links.html links=link.children level=next_level %}
+      </nav>
+    </div>
+  {%- else -%}
+    <a class="block text-sm text-gray-600 hover:text-blue-600 transition-colors" href="{{ link.url | relative_url }}" style="margin-left: {{ include.level | times: 8 }}px;">{{ link.title | escape }}</a>
+  {%- endif -%}
+{%- endfor -%}
