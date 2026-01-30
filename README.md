@@ -107,6 +107,13 @@ header_pages:
         url: "/docs"
       - title: "Tutorials"
         url: "/tutorials"
+      # Nested submenus (arbitrary depth): use children again
+      - title: "Guides"
+        children:
+          - title: "Getting Started"
+            url: "/guides/start"
+          - title: "Advanced"
+            url: "/guides/advanced"
 
 # Footer navigation
 site_map:
@@ -126,6 +133,15 @@ minima:
     github: username
     linkedin: username
 ```
+
+### Nested submenus (arbitrary depth)
+
+Header dropdowns support unlimited nesting. Any item with `children` can itself contain items that have `children`. On desktop, group labels show a right arrow and open a flyout to the right; on mobile, nested items are collapsible sections with indentation.
+
+- **Link:** `title` + `url` (no `children`)
+- **Submenu group:** `title` + `children` (array of links and/or more groups)
+
+The example above shows a "Guides" group with "Getting Started" and "Advanced" as a sub-sub menu under Resources.
 
 ## Content & Layouts
 

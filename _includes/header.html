@@ -24,9 +24,7 @@
                   </svg>
                 </button>
                 <div class="dropdown-menu absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[250px] z-50 opacity-0 invisible -translate-y-2 transition-all duration-200 py-2 text-left">
-                  {%- for child in item.children -%}
-                    <a class="block px-4 py-2 text-gray-600 no-underline font-normal transition-colors duration-200 hover:bg-gray-50 hover:text-blue-600 whitespace-nowrap" href="{{ child.url | relative_url }}">{{ child.title | escape }}</a>
-                  {%- endfor -%}
+                  {% include nav-children-desktop.html items=item.children level=0 %}
                 </div>
               </div>
             {%- else -%}
@@ -69,9 +67,7 @@
                 </svg>
               </button>
               <div class="mobile-dropdown-menu hidden pl-8 pb-2 space-y-1">
-                {%- for child in item.children -%}
-                  <a class="block px-4 py-2 text-gray-600 no-underline font-normal active:text-blue-600 active:bg-blue-50 focus:text-blue-600 focus:bg-gray-50 rounded-md transition-all duration-200 touch-manipulation" href="{{ child.url | relative_url }}">{{ child.title | escape }}</a>
-                {%- endfor -%}
+                {% include nav-children-mobile.html items=item.children level=0 %}
               </div>
             </div>
           {%- else -%}
@@ -106,6 +102,17 @@
 
 .dropdown-toggle.active svg {
   transform: rotate(180deg);
+}
+
+/* Nested desktop submenus (arbitrary depth) */
+.dropdown-submenu-wrapper {
+  position: relative;
+}
+.dropdown-submenu-wrapper .dropdown-submenu {
+  display: none;
+}
+.dropdown-submenu-wrapper:hover .dropdown-submenu {
+  display: block;
 }
 
 /* Hover effects for desktop dropdowns */
@@ -143,7 +150,8 @@
 #mobile-menu.active {
   display: block !important;
   opacity: 1;
-  max-height: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .mobile-dropdown-menu.active {
