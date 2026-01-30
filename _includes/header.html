@@ -114,6 +114,11 @@
 .dropdown-submenu-wrapper:hover .dropdown-submenu {
   display: block;
 }
+/* Align flyout first line with parent row's right arrow: minimal left padding */
+.dropdown-submenu > a,
+.dropdown-submenu > .dropdown-submenu-wrapper > .dropdown-submenu-label {
+  padding-left: 0.5rem !important;
+}
 
 /* Hover effects for desktop dropdowns */
 @media (min-width: 768px) {

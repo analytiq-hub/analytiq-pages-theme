@@ -21,7 +21,33 @@ layout: default
 
     <!-- Documentation widget sidebar -->
     <aside class="hidden lg:block w-50 flex-shrink-0 fixed top-24 right-8 z-40">
-      {%- include docs-widget.html -%}
+      {%- assign docs_nav = nil -%}
+      {%- for item in site.header_pages -%}
+        {%- if item.title == "Docs" and item.children -%}
+          {%- assign docs_nav = item.children -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- include docs-widget.html items=docs_nav -%}
     </aside>
   </div>
 </div>
+
+<style>
+/* Docs sidebar: collapsible groups */
+.docs-nav-group summary::-webkit-details-marker { display: none; }
+.docs-nav-group .docs-nav-chevron { transition: transform 0.2s; }
+.docs-nav-group[open] .docs-nav-chevron { transform: rotate(90deg); }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var active = document.querySelector('.docs-nav-widget .docs-nav-link.bg-blue-50');
+  if (active) {
+    var group = active.closest('.docs-nav-group');
+    while (group) {
+      group.open = true;
+      group = group.parentElement ? group.parentElement.closest('.docs-nav-group') : null;
+    }
+  }
+});
+</script>
