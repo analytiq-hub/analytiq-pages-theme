@@ -19,15 +19,17 @@ layout: default
       </article>
     </div>
 
-    <!-- Documentation widget sidebar -->
+    <!-- Documentation widget sidebar: site.docs_sidebar_pages if set, else header_pages → Docs -->
     <aside class="hidden lg:block w-50 flex-shrink-0 fixed top-24 right-8 z-40">
-      {%- assign docs_nav = nil -%}
-      {%- for item in site.header_pages -%}
-        {%- if item.title == "Docs" and item.children -%}
-          {%- assign docs_nav = item.children -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
+      {%- assign docs_nav = site.docs_sidebar_pages -%}
+      {%- unless docs_nav -%}
+        {%- for item in site.header_pages -%}
+          {%- if item.title == "Docs" and item.children -%}
+            {%- assign docs_nav = item.children -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
       {%- include docs-widget.html items=docs_nav -%}
     </aside>
   </div>
