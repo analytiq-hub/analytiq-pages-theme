@@ -1,0 +1,139 @@
+/* Navigation styles for the Analytiq Pages theme */
+
+/* Desktop dropdown menu styles */
+.dropdown-menu {
+  pointer-events: none;
+  display: none;
+}
+
+.dropdown-menu.active {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.dropdown-toggle.active svg {
+  transform: rotate(180deg);
+}
+
+/* Nested desktop submenus (arbitrary depth) */
+.dropdown-submenu-wrapper {
+  position: relative;
+}
+.dropdown-submenu-wrapper .dropdown-submenu {
+  display: none;
+}
+.dropdown-submenu-wrapper:hover .dropdown-submenu {
+  display: block;
+}
+/* Align flyout first line with parent row's right arrow: minimal left padding */
+.dropdown-submenu > a,
+.dropdown-submenu > .dropdown-submenu-wrapper > .dropdown-submenu-label {
+  padding-left: 0.5rem !important;
+}
+
+/* Hover effects for desktop dropdowns */
+@media (min-width: 768px) {
+  .dropdown-container:hover .dropdown-menu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .dropdown-container:hover .dropdown-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  /* Ensure dropdown stays open when hovering over the menu */
+  .dropdown-menu:hover {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* Mobile menu styles */
+#mobile-menu {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+#mobile-menu.active {
+  display: block !important;
+  opacity: 1;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mobile-dropdown-menu.active {
+  display: block !important;
+}
+
+.mobile-dropdown-toggle.active svg {
+  transform: rotate(180deg);
+}
+
+/* Enhanced mobile touch effects */
+.mobile-dropdown-toggle:active svg,
+.mobile-dropdown-toggle:focus svg,
+.mobile-dropdown-toggle.active svg {
+  color: rgb(59, 130, 246) !important;
+}
+
+/* Add subtle touch feedback animation */
+@media (hover: none) and (pointer: coarse) {
+  .mobile-dropdown-toggle:active,
+  #mobile-menu a:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Prevent visited link color changes */
+#nav-menu a:visited,
+#mobile-menu a:visited {
+  color: #4b5563 !important; /* text-gray-600 */
+}
+
+#nav-menu a:hover:visited,
+#mobile-menu a:hover:visited {
+  color: #2563eb !important; /* text-blue-600 */
+}
+
+/* Ensure solid button style keeps white text even when visited */
+#nav-menu a.bg-blue-600:visited,
+#mobile-menu a.bg-blue-600:visited {
+  color: white !important;
+}
+
+/* Light blue text on hover for solid buttons */
+#nav-menu a.bg-blue-600:hover,
+#nav-menu a.bg-blue-600:hover:visited,
+#mobile-menu a.bg-blue-600:hover,
+#mobile-menu a.bg-blue-600:hover:visited {
+  color: #93c5fd !important; /* text-blue-300 */
+}
+
+/* Smooth transitions for interactive elements only */
+a,
+button,
+input,
+select,
+textarea,
+.dropdown-toggle,
+.dropdown-menu,
+.mobile-dropdown-toggle,
+.mobile-dropdown-menu,
+#mobile-menu,
+[role="button"] {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
