@@ -5,7 +5,10 @@
     <div class="flex items-center justify-between h-16">
       <!-- Logo/Title -->
       <div class="flex items-center">
-        <a class="text-2xl font-bold tracking-tight text-gray-900 no-underline hover:text-blue-600 transition-colors duration-200" rel="author" href="{{ "/" | relative_url }}">
+        <a class="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 no-underline hover:text-blue-600 transition-colors duration-200" rel="author" href="{{ "/" | relative_url }}">
+          {%- if site.logo -%}
+            <img src="{{ site.logo | relative_url }}" alt="{{ site.title | escape }}" class="h-8 w-auto" {%- if site.logo_2x %} srcset="{{ site.logo_2x | relative_url }} 2x"{% endif %} loading="eager">
+          {%- endif -%}
           {{ site.title | escape }}
         </a>
       </div>
